@@ -1,0 +1,82 @@
+{% extends "blog/base.html" %}
+
+{% load static %}
+
+{% block main %}
+
+    <!-- Page Header-->
+    <header class="masthead" style="background-image: url('{% static "blog/assets/img/background2.jpg" %}')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="site-heading">
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <h1>وبلاگ جنگوی</h1>
+                        <span class="subheading">نمونه کار با جنگو </span>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+   <!-- Main Content-->
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                {% block header %}
+                {% endblock %}
+
+                {% for item in object_list %}
+                
+                <!-- Post preview-->
+                    <div class="post-preview">
+                        <a href="{% url "blog:detail" item.slug %}">
+                            <h2 class="post-title">
+                                <center>{{item.title}}</center>
+                            </h2>
+                            <br>
+                            <img src="{{item.thumbnail.url}}" alt="" width="700" height="450">
+                            <br>
+                            <h3 class="post-subtitle" dir='rtl'>
+                                {{item.description|truncatewords:50}}
+                            </h3>
+                        </a>
+                        <br>
+                        <p class="post-meta text-center">
+                            نوشته شده توسط
+                            <a href="{% url "blog:author" item.author %}"> {{item.author.get_full_name}}</a>
+                            {{item.jpublish}}
+                        </p>
+                        <div>
+                            {% for cat in item.category.active %}
+                                <a href="{% url 'blog:category' cat.slug %}">#{{cat.title}} </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!-- Divider-->
+                    <hr class="my-4" />
+                {% endfor %}
+                
+                <!-- Pager-->
+                <div class="d-flex justify-content-end mb-4 pager-bottom">
+                    {% if page_obj.has_previous %}
+                    <a class="btn btn-primary text-uppercase mr-3" href="{% block previous_page_url %}{% endblock  %}"> پست های جدید &rarr;</a>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                    <a class="btn btn-primary text-uppercase mr-3" href="{% block next_page_url %}{% endblock  %}"> پست های قدیمی &larr;</a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
